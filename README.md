@@ -3,7 +3,8 @@
 A minimal, personal consistency and daily task tracking web app focused on
 long-term discipline rather than gamification.
 
-🚀 **Live Preview:** [[__](https://visionary-chimera-fbbeda.netlify.app)](https://visionary-chimera-fbdeda.netlify.app/)
+🚀 **Live Preview:** https://visionary-chimera-fbbeda.netlify.app
+
 
 ---
 
