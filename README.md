@@ -1,3 +1,52 @@
+# Consistency Tracker
+
+A minimal, personal consistency and daily task tracking web app focused on
+long-term discipline rather than gamification.
+
+🚀 **Live Preview:** _(Coming soon – Netlify deployment)_
+
+---
+
+## ✨ Features
+- Fixed daily tasks
+- One-time and repeatable task tracking
+- Priority levels (low / medium / high)
+- Optional timers for tasks
+- Daily completion percentage
+- Weekly & monthly consistency averages
+- Minimal dark UI
+- Automatic carry-over of unfinished tasks
+
+---
+
+## 🛠 Tech Stack
+- **Frontend:** React + Vite
+- **Backend:** Node.js + Express
+- **Database:** PostgreSQL
+- **Hosting:** Netlify (frontend), Render/Railway (backend)
+
+---
+
+## 📊 Consistency Logic
+- Daily completion = completed tasks / total tasks
+- Weekly completion = average of daily completion %
+- Monthly completion = average of daily completion %
+
+---
+
+## 🚧 Status
+This project is under active development.
+
+---
+
+## 📦 Local Setup
+
+```bash
+# install dependencies
+npm install
+
+# start frontend
+npm run dev
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
