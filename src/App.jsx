@@ -4,6 +4,7 @@ import AddTaskForm from './components/AddTaskForm';
 import TaskList from './components/TaskList';
 import StatsOverview from './components/StatsOverview';
 import AnalyticsCharts from './components/AnalyticsCharts';
+import LoadingScreen from './components/LoadingScreen';
 import { TaskProvider, useTasks } from './context/TaskContext';
 
 import useScheduledNotifications, { requestNotificationPermission } from './hooks/useScheduledNotifications';
@@ -38,11 +39,7 @@ const InnerApp = ({ isDesktop }) => {
   };
 
   if (loading) {
-    return (
-      <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <div className="text-muted">Connecting to database...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
