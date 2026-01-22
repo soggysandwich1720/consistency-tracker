@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { getTodayDateString } from '../utils/dateUtils';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+
 
 const TaskContext = createContext();
 
@@ -18,32 +19,25 @@ export const TaskProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             const minLoadingTime = 2600;
+            const timer = new Promise(resolve => setTimeout(resolve, minLoadingTime));
 
             try {
-                // Fetch data and wait for minimum time in parallel
                 const [tasksRes, historyRes] = await Promise.all([
                     axios.get(`${API_BASE_URL}/tasks`),
-                    axios.get(`${API_BASE_URL}/history`),
-                    new Promise(resolve => setTimeout(resolve, minLoadingTime))
+                    axios.get(`${API_BASE_URL}/history`)
                 ]);
 
                 setTasks(tasksRes.data);
-
                 const activeTaskIdsSet = new Set(tasksRes.data.map(t => t.id));
                 const transformedHistory = historyRes.data.reduce((acc, row) => {
                     const dateStr = new Date(row.date).toISOString().split('T')[0];
                     if (!acc[dateStr]) {
                         acc[dateStr] = { assigned: [], completed: [], timers: {} };
                     }
-
                     if (activeTaskIdsSet.has(row.task_id)) {
                         acc[dateStr].assigned.push(row.task_id);
-                        if (row.is_completed) {
-                            acc[dateStr].completed.push(row.task_id);
-                        }
-                        if (row.timer_seconds > 0) {
-                            acc[dateStr].timers[row.task_id] = row.timer_seconds;
-                        }
+                        if (row.is_completed) acc[dateStr].completed.push(row.task_id);
+                        if (row.timer_seconds > 0) acc[dateStr].timers[row.task_id] = row.timer_seconds;
                     }
                     return acc;
                 }, {});
@@ -52,23 +46,16 @@ export const TaskProvider = ({ children }) => {
 
                 if (!transformedHistory[today]) {
                     const activeTaskIds = tasksRes.data.filter(t => t.is_active !== false).map(t => t.id);
-                    await axios.post(`${API_BASE_URL}/history/init`, {
-                        date: today,
-                        activeTaskIds
-                    });
-
+                    await axios.post(`${API_BASE_URL}/history/init`, { date: today, activeTaskIds }).catch(() => { });
                     setHistory(prev => ({
                         ...prev,
-                        [today]: {
-                            assigned: activeTaskIds,
-                            completed: [],
-                            timers: {}
-                        }
+                        [today]: { assigned: activeTaskIds, completed: [], timers: {} }
                     }));
                 }
             } catch (err) {
-                console.error('Error fetching data:', err);
+                console.warn('Database offline or connection failed. Showing UI anyway.');
             } finally {
+                await timer;
                 setLoading(false);
             }
         };
