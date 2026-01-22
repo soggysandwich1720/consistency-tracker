@@ -17,9 +17,15 @@ export const TaskProvider = ({ children }) => {
     // Fetch initial data
     useEffect(() => {
         const fetchData = async () => {
+            const minLoadingTime = 1500;
+
             try {
-                const tasksRes = await axios.get(`${API_BASE_URL}/tasks`);
-                const historyRes = await axios.get(`${API_BASE_URL}/history`);
+                // Fetch data and wait for minimum time in parallel
+                const [tasksRes, historyRes] = await Promise.all([
+                    axios.get(`${API_BASE_URL}/tasks`),
+                    axios.get(`${API_BASE_URL}/history`),
+                    new Promise(resolve => setTimeout(resolve, minLoadingTime))
+                ]);
 
                 setTasks(tasksRes.data);
 
@@ -30,7 +36,6 @@ export const TaskProvider = ({ children }) => {
                         acc[dateStr] = { assigned: [], completed: [], timers: {} };
                     }
 
-                    // Only include in calculations if the task is still active
                     if (activeTaskIdsSet.has(row.task_id)) {
                         acc[dateStr].assigned.push(row.task_id);
                         if (row.is_completed) {
@@ -45,7 +50,6 @@ export const TaskProvider = ({ children }) => {
 
                 setHistory(transformedHistory);
 
-                // Initialize today if it doesn't exist
                 if (!transformedHistory[today]) {
                     const activeTaskIds = tasksRes.data.filter(t => t.is_active !== false).map(t => t.id);
                     await axios.post(`${API_BASE_URL}/history/init`, {
