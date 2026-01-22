@@ -17,7 +17,7 @@ export const TaskProvider = ({ children }) => {
     // Fetch initial data
     useEffect(() => {
         const fetchData = async () => {
-            const minLoadingTime = 1500;
+            const minLoadingTime = 2600;
 
             try {
                 // Fetch data and wait for minimum time in parallel
