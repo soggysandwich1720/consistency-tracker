@@ -10,7 +10,6 @@ import { TaskProvider, useTasks } from './context/TaskContext';
 import useScheduledNotifications, { requestNotificationPermission } from './hooks/useScheduledNotifications';
 
 function App() {
-  // Simple responsive check for layout
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 900);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ function App() {
   );
 }
 
-// Separate component to validly call context/hooks inside Provider
 const InnerApp = ({ isDesktop }) => {
   const { loading } = useTasks();
   useScheduledNotifications();
@@ -62,7 +60,7 @@ const InnerApp = ({ isDesktop }) => {
           </div>
         )}
 
-        {/* Right Column: Main Tracker */}
+        {/* Main Tracker */}
         <div style={{ order: 1 }}>
           <Header />
           <StatsOverview />

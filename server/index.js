@@ -9,9 +9,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// --- Tasks Routes ---
-
-// Get all tasks
+// Routes
 app.get('/api/tasks', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM tasks WHERE is_active = true ORDER BY created_at ASC');
@@ -22,7 +20,6 @@ app.get('/api/tasks', async (req, res) => {
     }
 });
 
-// Add a new task
 app.post('/api/tasks', async (req, res) => {
     const { id, name, priority, hasTimer, scheduledTime } = req.body;
     try {
@@ -37,7 +34,6 @@ app.post('/api/tasks', async (req, res) => {
     }
 });
 
-// Soft delete a task
 app.delete('/api/tasks/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -49,24 +45,9 @@ app.delete('/api/tasks/:id', async (req, res) => {
     }
 });
 
-// --- History Routes ---
-
-// Get all history
 app.get('/api/history', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM history ORDER BY date DESC');
-        // Group history by date for front-end convenience
-        const groupedHistory = result.rows.reduce((acc, row) => {
-            const dateStr = row.date.toISOString().split('T')[0];
-            if (!acc[dateStr]) {
-                acc[dateStr] = { assigned: [], completed: [], timers: {} };
-            }
-            // We'll need a way to track "assigned" vs "available"
-            // For now, let's just send the raw rows or a better structure
-            return acc;
-        }, {});
-
-        // Actually, it's simpler to let the frontend handle the mapping or send a clean structure
         res.json(result.rows);
     } catch (err) {
         console.error(err);
@@ -74,7 +55,6 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// Save/Update history entry
 app.post('/api/history', async (req, res) => {
     const { date, taskId, isCompleted, timerSeconds } = req.body;
     try {
@@ -93,12 +73,9 @@ app.post('/api/history', async (req, res) => {
     }
 });
 
-// Sync today's assignment (Initialization logic)
 app.post('/api/history/init', async (req, res) => {
     const { date, activeTaskIds } = req.body;
     try {
-        // For each active task, ensure an entry exists in history for that date
-        // This is primarily to record what was "assigned" even if 0% completion
         for (const taskId of activeTaskIds) {
             await db.query(
                 'INSERT INTO history (date, task_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',

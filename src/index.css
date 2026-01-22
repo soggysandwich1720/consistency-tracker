@@ -2,28 +2,20 @@
   --bg-primary: #121212;
   --bg-secondary: #1E1E1E;
   --bg-tertiary: #2C2C2C;
-
   --text-primary: #E0E0E0;
   --text-secondary: #A0A0A0;
   --text-muted: #666666;
-
   --accent-primary: #ffffff;
-  /* Minimal white accent */
   --accent-success: #4CAF50;
-  /* Subtle green for completion */
   --accent-warning: #FFC107;
   --accent-error: #FF5252;
-
   --border-color: #333333;
-
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-
   --radius-sm: 4px;
   --radius-md: 8px;
 }
@@ -50,7 +42,6 @@ button {
   font-family: inherit;
   color: inherit;
   touch-action: manipulation;
-  /* Optimize click delay */
 }
 
 input,
@@ -61,12 +52,9 @@ textarea {
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 12px;
-  /* Larger touch target */
   border-radius: var(--radius-sm);
   font-size: 16px;
-  /* Prevent iOS zoom */
   width: 100%;
-  /* Default to full width on mobile */
 }
 
 input:focus,
@@ -94,10 +82,8 @@ ul {
   list-style: none;
 }
 
-/* Utilities */
 .container {
   max-width: 1000px;
-  /* Max desktop width */
   margin: 0 auto;
   padding: var(--spacing-md);
   width: 100%;
@@ -144,7 +130,7 @@ ul {
   font-size: 0.875rem;
 }
 
-/* Loading Screen Styles */
+/* Loading Screen */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -297,7 +283,6 @@ ul {
   }
 }
 
-/* Responsive Loading Screen */
 @media (max-width: 600px) {
   .loading-text {
     font-size: 1.8rem;
