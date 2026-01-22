@@ -24,17 +24,25 @@ const AddTaskForm = () => {
         return (
             <button
                 onClick={() => setIsOpen(true)}
+                className="add-task-btn"
                 style={{
                     width: '100%',
-                    padding: '16px', // Larger touch target
+                    padding: '16px',
                     border: '1px dashed var(--border-color)',
                     borderRadius: 'var(--radius-md)',
-                    color: 'var(--text-muted)',
+                    color: 'var(--accent-success)',
                     marginTop: 'var(--spacing-md)',
-                    fontSize: '1rem'
+                    fontSize: '1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'all 0.3s ease',
+                    background: 'transparent',
+                    opacity: 0.8
                 }}
             >
-                + Add New Daily Habit
+                <span style={{ fontSize: '1.2rem' }}>+</span> Add New Daily Habit
             </button>
         );
     }
@@ -86,7 +94,21 @@ const AddTaskForm = () => {
 
             <div className="flex gap-sm justify-between" style={{ marginTop: '8px' }}>
                 <button type="button" onClick={() => setIsOpen(false)} style={{ color: 'var(--text-muted)' }}>Cancel</button>
-                <button type="submit" style={{ background: 'var(--text-primary)', color: 'var(--bg-primary)', padding: '6px 16px', borderRadius: 'var(--radius-sm)' }}>Save Habit</button>
+                <button
+                    type="submit"
+                    className="save-habit-btn"
+                    style={{
+                        background: 'var(--accent-success)',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: 'var(--radius-md)',
+                        fontWeight: '600',
+                        boxShadow: '0 4px 12px rgba(76, 175, 80, 0.2)',
+                        transition: 'all 0.2s ease'
+                    }}
+                >
+                    Save Habit
+                </button>
             </div>
         </form>
     );
