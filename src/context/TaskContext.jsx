@@ -207,12 +207,25 @@ export const TaskProvider = ({ children }) => {
     };
 
     const consistencyScore = (() => {
-        const avg7 = calculateAverage(7);
-        const avg30 = calculateAverage(30);
-        const streak = calculateCurrentStreak();
-        const streakBonus = Math.min(streak * 2, 10);
-        const score = Math.round((avg7 * 0.7) + (avg30 * 0.2) + streakBonus);
-        return Math.min(score, 100);
+        const daysToAverage = 7;
+        let sum = 0;
+        let daysWithData = 0;
+        const checkDate = new Date();
+
+        for (let i = 0; i < daysToAverage; i++) {
+            const dateStr = checkDate.toISOString().split('T')[0];
+            const entry = history[dateStr];
+
+            if (entry && entry.assigned && entry.assigned.length > 0) {
+                const completionRate = (entry.completed.length / entry.assigned.length) * 100;
+                sum += Math.round(completionRate);
+                daysWithData++;
+            }
+            checkDate.setDate(checkDate.getDate() - 1);
+        }
+
+        if (daysWithData === 0) return 0;
+        return Math.round(sum / daysWithData);
     })();
 
     const value = {
