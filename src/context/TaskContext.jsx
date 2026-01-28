@@ -207,25 +207,30 @@ export const TaskProvider = ({ children }) => {
     };
 
     const consistencyScore = (() => {
-        const daysToAverage = 7;
+        // Get all historical dates and sort them descending (newest first)
+        const sortedDates = Object.keys(history).sort((a, b) => new Date(b) - new Date(a));
+
+        let activeDaysCount = 0;
         let sum = 0;
-        let daysWithData = 0;
-        const checkDate = new Date();
+        const targetDays = 7;
 
-        for (let i = 0; i < daysToAverage; i++) {
-            const dateStr = checkDate.toISOString().split('T')[0];
+        for (const dateStr of sortedDates) {
+            if (activeDaysCount >= targetDays) break;
+
             const entry = history[dateStr];
-
             if (entry && entry.assigned && entry.assigned.length > 0) {
                 const completionRate = (entry.completed.length / entry.assigned.length) * 100;
-                sum += Math.round(completionRate);
-                daysWithData++;
+
+                // Only count days where some work was done (> 0%)
+                if (completionRate > 0) {
+                    sum += Math.round(completionRate);
+                    activeDaysCount++;
+                }
             }
-            checkDate.setDate(checkDate.getDate() - 1);
         }
 
-        if (daysWithData === 0) return 0;
-        return Math.round(sum / daysWithData);
+        if (activeDaysCount === 0) return 0;
+        return Math.round(sum / activeDaysCount);
     })();
 
     const value = {
