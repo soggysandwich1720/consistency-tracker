@@ -89,9 +89,14 @@ const StatsOverview = () => {
                         />
                     </svg>
                     <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <span style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
-                            {Math.round(animatedScore)}
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                            <span style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
+                                {Math.round(animatedScore)}
+                            </span>
+                            <span style={{ fontSize: '1.25rem', fontWeight: '300', color: 'var(--text-secondary)', marginLeft: '2px' }}>
+                                %
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <span className="text-muted" style={{ marginTop: '16px', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
