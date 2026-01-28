@@ -8,7 +8,7 @@ const StatsOverview = () => {
     // Initial animation for the score and ring
     useEffect(() => {
         let startTime;
-        const duration = 1500; // 1.5s duration
+        const duration = 2000; // Increased to 2s for smoother transition
         const startValue = 0;
         const endValue = consistencyScore;
 
@@ -19,7 +19,9 @@ const StatsOverview = () => {
             // Easing function: easeOutQuart (starts fast, slows down)
             const easeProgress = 1 - Math.pow(1 - progress, 4);
 
-            setAnimatedScore(Math.floor(startValue + easeProgress * (endValue - startValue)));
+            // Keep as float for smoother calculation of the ring offset
+            const currentVal = startValue + easeProgress * (endValue - startValue);
+            setAnimatedScore(currentVal);
 
             if (progress < 1) {
                 requestAnimationFrame(animate);
@@ -41,9 +43,10 @@ const StatsOverview = () => {
 
     // SVG parameters
     const size = 160;
-    const strokeWidth = 3;
+    const strokeWidth = 8; // Increased from 3 to 8 for a thicker look
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
+    // Use the float animatedScore for the offset calculation
     const offset = circumference - (animatedScore / 100) * circumference;
 
     return (
@@ -69,7 +72,7 @@ const StatsOverview = () => {
                             fill="transparent"
                             stroke="var(--border-color)"
                             strokeWidth={strokeWidth}
-                            opacity="0.3"
+                            opacity="0.2"
                         />
                         {/* Progress Circle */}
                         <circle
@@ -77,7 +80,7 @@ const StatsOverview = () => {
                             cy={size / 2}
                             r={radius}
                             fill="transparent"
-                            stroke="var(--accent-primary)"
+                            stroke="var(--accent-success)" // Changed to green
                             strokeWidth={strokeWidth}
                             strokeDasharray={circumference}
                             strokeDashoffset={offset}
@@ -87,7 +90,7 @@ const StatsOverview = () => {
                     </svg>
                     <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <span style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
-                            {animatedScore}
+                            {Math.round(animatedScore)}
                         </span>
                     </div>
                 </div>
