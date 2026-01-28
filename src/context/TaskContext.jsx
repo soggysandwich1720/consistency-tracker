@@ -174,6 +174,47 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    const calculateAverage = (days) => {
+        let sum = 0;
+        let daysWithData = 0;
+        const checkDate = new Date();
+        for (let i = 0; i < days; i++) {
+            const dateStr = checkDate.toISOString().split('T')[0];
+            const entry = history[dateStr];
+            if (entry && entry.assigned && entry.assigned.length > 0) {
+                sum += Math.round((entry.completed.length / entry.assigned.length) * 100);
+                daysWithData++;
+            }
+            checkDate.setDate(checkDate.getDate() - 1);
+        }
+        return daysWithData === 0 ? 0 : Math.round(sum / daysWithData);
+    };
+
+    const calculateCurrentStreak = () => {
+        let streak = 0;
+        let checkDate = new Date();
+        for (let i = 0; i < 365; i++) {
+            const dateStr = checkDate.toISOString().split('T')[0];
+            const entry = history[dateStr];
+            if (entry && entry.completed.length > 0) {
+                streak++;
+            } else if (dateStr !== today) {
+                break;
+            }
+            checkDate.setDate(checkDate.getDate() - 1);
+        }
+        return streak;
+    };
+
+    const consistencyScore = (() => {
+        const avg7 = calculateAverage(7);
+        const avg30 = calculateAverage(30);
+        const streak = calculateCurrentStreak();
+        const streakBonus = Math.min(streak * 2, 10);
+        const score = Math.round((avg7 * 0.7) + (avg30 * 0.2) + streakBonus);
+        return Math.min(score, 100);
+    })();
+
     const value = {
         tasks,
         history,
@@ -182,7 +223,10 @@ export const TaskProvider = ({ children }) => {
         addTask,
         toggleTaskCompletion,
         deleteTask,
-        updateTimer
+        updateTimer,
+        calculateAverage,
+        calculateCurrentStreak,
+        consistencyScore
     };
 
     return (

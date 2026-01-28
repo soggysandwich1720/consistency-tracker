@@ -10,12 +10,16 @@ import { TaskProvider, useTasks } from './context/TaskContext';
 import useScheduledNotifications, { requestNotificationPermission } from './hooks/useScheduledNotifications';
 
 function App() {
+  useEffect(() => {
+    console.log("API URL:", import.meta.env.VITE_API_URL);
+  }, []);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 900);
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth > 900);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -24,7 +28,6 @@ function App() {
     </TaskProvider>
   );
 }
-
 const InnerApp = ({ isDesktop }) => {
   const { loading } = useTasks();
   useScheduledNotifications();
