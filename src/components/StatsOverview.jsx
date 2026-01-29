@@ -42,7 +42,7 @@ const StatsOverview = () => {
     const streakVal = calculateCurrentStreak();
 
     // SVG parameters
-    const size = 160;
+    const size = 200;
     const strokeWidth = 8; // Increased from 3 to 8 for a thicker look
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -87,12 +87,12 @@ const StatsOverview = () => {
                             strokeLinecap="round"
                             style={{
                                 transition: 'none',
-                                filter: 'drop-shadow(0 0 5px rgba(76, 175, 80, 0.6))' // Glow effect
+                                filter: 'drop-shadow(0 0 3px rgba(76, 175, 80, 0.3))' // Softened glow
                             }}
                         />
                     </svg>
                     <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <span className="glow-text-green" style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
+                        <span className="glow-text-green" style={{ fontSize: '3rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
                             {Math.round(animatedScore)}
                         </span>
                     </div>
