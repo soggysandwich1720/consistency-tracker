@@ -80,16 +80,19 @@ const StatsOverview = () => {
                             cy={size / 2}
                             r={radius}
                             fill="transparent"
-                            stroke="var(--accent-success)" // Changed to green
+                            stroke="var(--accent-success)"
                             strokeWidth={strokeWidth}
                             strokeDasharray={circumference}
                             strokeDashoffset={offset}
                             strokeLinecap="round"
-                            style={{ transition: 'none' }}
+                            style={{
+                                transition: 'none',
+                                filter: 'drop-shadow(0 0 5px rgba(76, 175, 80, 0.6))' // Glow effect
+                            }}
                         />
                     </svg>
                     <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <span style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
+                        <span className="glow-text-green" style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
                             {Math.round(animatedScore)}
                         </span>
                     </div>

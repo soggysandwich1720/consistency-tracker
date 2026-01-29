@@ -42,7 +42,7 @@ const AddTaskForm = () => {
                     opacity: 0.8
                 }}
             >
-                <span style={{ fontSize: '1.2rem' }}>+</span> Add New Daily Habit
+                <span style={{ fontSize: '1.2rem' }}>+</span> <span className="glow-text-green">Add New Daily Habit</span>
             </button>
         );
     }
@@ -96,7 +96,7 @@ const AddTaskForm = () => {
                 <button type="button" onClick={() => setIsOpen(false)} style={{ color: 'var(--text-muted)' }}>Cancel</button>
                 <button
                     type="submit"
-                    className="save-habit-btn"
+                    className="save-habit-btn glow-box-green"
                     style={{
                         background: 'var(--accent-success)',
                         color: 'white',
