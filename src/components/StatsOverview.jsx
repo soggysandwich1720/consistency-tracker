@@ -42,11 +42,11 @@ const StatsOverview = () => {
     const streakVal = calculateCurrentStreak();
 
     // SVG parameters
-    const size = 200;
-    const strokeWidth = 8; // Increased from 3 to 8 for a thicker look
+    const size = 160;
+    const containerSize = 200; // Extra space for glow
+    const strokeWidth = 8;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
-    // Use the float animatedScore for the offset calculation
     const offset = circumference - (animatedScore / 100) * circumference;
 
     return (
@@ -62,12 +62,12 @@ const StatsOverview = () => {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+                <div style={{ position: 'relative', width: containerSize, height: containerSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width={containerSize} height={containerSize} style={{ transform: 'rotate(-90deg)' }}>
                         {/* Background Circle */}
                         <circle
-                            cx={size / 2}
-                            cy={size / 2}
+                            cx={containerSize / 2}
+                            cy={containerSize / 2}
                             r={radius}
                             fill="transparent"
                             stroke="var(--border-color)"
@@ -76,8 +76,8 @@ const StatsOverview = () => {
                         />
                         {/* Progress Circle */}
                         <circle
-                            cx={size / 2}
-                            cy={size / 2}
+                            cx={containerSize / 2}
+                            cy={containerSize / 2}
                             r={radius}
                             fill="transparent"
                             stroke="var(--accent-success)"
@@ -87,12 +87,12 @@ const StatsOverview = () => {
                             strokeLinecap="round"
                             style={{
                                 transition: 'none',
-                                filter: 'drop-shadow(0 0 3px rgba(76, 175, 80, 0.3))' // Softened glow
+                                filter: 'drop-shadow(0 0 4px rgba(76, 175, 80, 0.9))' // Stronger, tighter glow
                             }}
                         />
                     </svg>
                     <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <span className="glow-text-green" style={{ fontSize: '3rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
+                        <span className="glow-text-green" style={{ fontSize: '2.5rem', fontWeight: '300', color: 'var(--text-primary)', lineHeight: 1 }}>
                             {Math.round(animatedScore)}
                         </span>
                     </div>
