@@ -2,7 +2,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { getTodayDateString } from '../utils/dateUtils';
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${VITE_API_URL.replace(/\/$/, '')}/api`;
+
+console.log('TaskContext: API_BASE_URL is', API_BASE_URL);
 
 
 const TaskContext = createContext();
@@ -18,19 +21,25 @@ export const TaskProvider = ({ children }) => {
     // Fetch initial data
     useEffect(() => {
         const fetchData = async () => {
+            console.log('TaskContext: fetchData started');
             const minLoadingTime = 2600;
             const timer = new Promise(resolve => setTimeout(resolve, minLoadingTime));
 
             try {
+                console.log('TaskContext: Fetching tasks and history from', API_BASE_URL);
                 const [tasksRes, historyRes] = await Promise.all([
-                    axios.get(`${API_BASE_URL}/tasks`),
-                    axios.get(`${API_BASE_URL}/history`)
+                    axios.get(`${API_BASE_URL}/tasks`, { timeout: 5000 }),
+                    axios.get(`${API_BASE_URL}/history`, { timeout: 5000 })
                 ]);
+
+                console.log(`TaskContext: Received ${tasksRes.data.length} tasks and ${historyRes.data.length} history rows`);
 
                 setTasks(tasksRes.data);
                 const activeTaskIdsSet = new Set(tasksRes.data.map(t => t.id));
                 const transformedHistory = historyRes.data.reduce((acc, row) => {
-                    const dateStr = new Date(row.date).toISOString().split('T')[0];
+                    const rawDate = new Date(row.date);
+                    const dateStr = `${rawDate.getFullYear()}-${String(rawDate.getMonth() + 1).padStart(2, '0')}-${String(rawDate.getDate()).padStart(2, '0')}`;
+
                     if (!acc[dateStr]) {
                         acc[dateStr] = { assigned: [], completed: [], timers: {} };
                     }
@@ -42,20 +51,33 @@ export const TaskProvider = ({ children }) => {
                     return acc;
                 }, {});
 
+                console.log('TaskContext: Transformed history keys:', Object.keys(transformedHistory));
                 setHistory(transformedHistory);
 
                 if (!transformedHistory[today]) {
+                    console.log('TaskContext: Today\'s history missing. Initializing for', today);
                     const activeTaskIds = tasksRes.data.filter(t => t.is_active !== false).map(t => t.id);
-                    await axios.post(`${API_BASE_URL}/history/init`, { date: today, activeTaskIds }).catch(() => { });
-                    setHistory(prev => ({
-                        ...prev,
-                        [today]: { assigned: activeTaskIds, completed: [], timers: {} }
-                    }));
+                    try {
+                        const initRes = await axios.post(`${API_BASE_URL}/history/init`, { date: today, activeTaskIds }, { timeout: 5000 });
+                        console.log('TaskContext: History init success:', initRes.data);
+                        setHistory(prev => ({
+                            ...prev,
+                            [today]: { assigned: activeTaskIds, completed: [], timers: {} }
+                        }));
+                    } catch (initErr) {
+                        console.error('TaskContext: Failed to initialize today\'s history:', initErr.message);
+                    }
                 }
             } catch (err) {
+                console.error('TaskContext: Critical fetch error:', err.message);
+                if (err.response) {
+                    console.error('TaskContext: Server responded with:', err.response.status, err.response.data);
+                }
                 console.warn('Database offline or connection failed. Showing UI anyway.');
             } finally {
+                console.log('TaskContext: fetchData finished, waiting for timer...');
                 await timer;
+                console.log('TaskContext: Loading set to false');
                 setLoading(false);
             }
         };

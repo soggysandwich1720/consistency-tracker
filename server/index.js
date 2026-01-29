@@ -14,6 +14,12 @@ app.get("/health", (req, res) => {
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 // Routes
 app.get('/api/tasks', async (req, res) => {
     try {
@@ -62,6 +68,7 @@ app.get('/api/history', async (req, res) => {
 
 app.post('/api/history', async (req, res) => {
     const { date, taskId, isCompleted, timerSeconds } = req.body;
+    console.log(`[DB] POST /api/history | Date: ${date}, Task: ${taskId}, Done: ${isCompleted}`);
     try {
         const result = await db.query(
             `INSERT INTO history (date, task_id, is_completed, timer_seconds) 
@@ -71,10 +78,11 @@ app.post('/api/history', async (req, res) => {
        RETURNING *`,
             [date, taskId, isCompleted, timerSeconds]
         );
+        console.log(`[DB] Success:`, result.rows[0] ? 'Row updated' : 'No rows returned');
         res.json(result.rows[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        console.error(`[DB] ERROR in POST /api/history:`, err.message);
+        res.status(500).json({ error: 'Server error', details: err.message });
     }
 });
 
