@@ -14,10 +14,43 @@ const Header = () => {
                     <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>Daily Checklist</h1>
                     <button
                         onClick={() => setIsHistoryOpen(true)}
-                        style={{ padding: '8px', color: 'var(--text-muted)' }}
+                        style={{
+                            padding: '6px',
+                            color: 'var(--text-muted)',
+                            background: 'transparent',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'transform 0.2s ease'
+                        }}
                         title="View History"
+                        className="hover-scale"
                     >
-                        <span style={{ fontSize: '1.2rem' }}>📅</span>
+                        <div style={{
+                            width: '24px',
+                            height: '24px',
+                            border: '2px solid currentColor',
+                            borderRadius: '4px',
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingTop: '6px'
+                        }}>
+                            {/* Calendar Header Bar */}
+                            <div style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '6px',
+                                background: 'currentColor',
+                                borderRadius: '1px 1px 0 0'
+                            }} />
+                            <span style={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                                {new Date().getDate()}
+                            </span>
+                        </div>
                     </button>
                 </div>
                 <div className="text-muted text-sm flex justify-between items-center">
