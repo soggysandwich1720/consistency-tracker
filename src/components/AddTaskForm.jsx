@@ -28,8 +28,8 @@ const AddTaskForm = () => {
                 style={{
                     width: '100%',
                     padding: '16px',
-                    border: '1px dashed var(--border-color)',
-                    borderRadius: 'var(--radius-md)',
+                    border: '1.5px dashed var(--border-color)',
+                    borderRadius: '12px',
                     color: 'var(--accent-success)',
                     marginTop: 'var(--spacing-md)',
                     fontSize: '1rem',
@@ -48,7 +48,7 @@ const AddTaskForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-md" style={{ background: 'var(--bg-secondary)', padding: 'var(--spacing-md)', borderRadius: 'var(--radius-md)', marginTop: 'var(--spacing-md)' }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-md" style={{ background: 'var(--bg-secondary)', padding: 'var(--spacing-md)', borderRadius: '12px', border: '1.5px solid var(--border-color)', marginTop: 'var(--spacing-md)' }}>
             <div className="flex flex-col gap-sm">
                 <label className="text-sm text-muted">Habit / Task Name</label>
                 <input

@@ -8,6 +8,7 @@
   --accent-primary: #ffffff;
   --accent-success: #4CAF50;
   --glow-success: 0 0 12px rgba(76, 175, 80, 0.4);
+  --glow-success-subtle: 0 0 8px rgba(76, 175, 80, 0.2);
   --accent-warning: #FFC107;
   --accent-error: #FF5252;
   --border-color: #333333;
@@ -19,6 +20,7 @@
   --spacing-xl: 32px;
   --radius-sm: 4px;
   --radius-md: 8px;
+  --complete-time: 1.2s;
 }
 
 * {
@@ -338,4 +340,86 @@ ul {
 
 .save-habit-btn:active {
   transform: translateY(0);
+}
+
+/* Task Card Interactions */
+.task-card {
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.3s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.task-card.pressing {
+  transform: scale(0.98);
+}
+
+.task-card.completed {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Tick Animation */
+@keyframes tick-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes tick-glow {
+  0% {
+    filter: drop-shadow(0 0 0px var(--accent-success));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 8px var(--accent-success));
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0px var(--accent-success));
+  }
+}
+
+.success-tick {
+  animation: tick-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  color: var(--accent-success);
+}
+
+.success-tick-glow {
+  animation: tick-glow 0.6s ease-out;
+}
+
+/* Border Fill SVG */
+.border-progress-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.progress-path {
+  fill: none;
+  stroke: var(--accent-success);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.progress-path-bg {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 1;
+  opacity: 0.3;
 }

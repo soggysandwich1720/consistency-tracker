@@ -106,8 +106,8 @@ const StatsOverview = () => {
             <div className="flex justify-between" style={{
                 padding: '16px',
                 background: 'var(--bg-secondary)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-color)'
+                borderRadius: '12px',
+                border: '1.5px solid var(--border-color)'
             }}>
                 <div className="flex flex-col items-center" style={{ flex: 1 }}>
                     <span className="text-muted text-xs uppercase tracking-tight">Today</span>

@@ -40,7 +40,12 @@ const TaskList = () => {
     }
 
     return (
-        <div className="flex flex-col">
+        <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+            gap: '12px',
+            marginBottom: '20px'
+        }}>
             {sortedTasks.map(task => (
                 <TaskItem
                     key={task.id}
